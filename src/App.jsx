@@ -82,6 +82,7 @@ export default function App() {
   // 删除确认弹窗状态
   const [deleteBookmarkId, setDeleteBookmarkId] = useState(null);
   const [deleteCategoryId, setDeleteCategoryId] = useState(null);
+  const [tagToDelete, setTagToDelete] = useState(null); // 新增：保存待删除的标签信息 { bookmarkId, tag }
 
   // --- 初始化数据加载 ---
   useEffect(() => {
@@ -190,13 +191,20 @@ export default function App() {
     }
   };
 
-  const handleRemoveTag = (bookmarkId, tagToRemove) => {
-    setBookmarks(bookmarks.map(b => {
-      if (b.id === bookmarkId) {
-        return { ...b, tags: b.tags.filter(t => t !== tagToRemove) };
-      }
-      return b;
-    }));
+  const handleDeleteTagClick = (bookmarkId, tag) => {
+    setTagToDelete({ bookmarkId, tag });
+  };
+
+  const confirmDeleteTag = () => {
+    if (tagToDelete) {
+      setBookmarks(bookmarks.map(b => {
+        if (b.id === tagToDelete.bookmarkId) {
+          return { ...b, tags: b.tags.filter(t => t !== tagToDelete.tag) };
+        }
+        return b;
+      }));
+      setTagToDelete(null);
+    }
   };
 
   const handleAddTagSubmit = (bookmarkId, e) => {
@@ -560,7 +568,7 @@ export default function App() {
                         <IconTag />
                         {tag}
                         <button 
-                          onClick={() => handleRemoveTag(bookmark.id, tag)}
+                          onClick={() => handleDeleteTagClick(bookmark.id, tag)}
                           className="text-indigo-300 hover:text-red-500 focus:outline-none ml-0.5 transition-colors"
                           title="删除标签"
                         >
@@ -761,6 +769,37 @@ export default function App() {
                 </button>
                 <button
                   onClick={confirmDeleteCategory}
+                  className="flex-1 px-4 py-2.5 text-white bg-red-600 hover:bg-red-700 rounded-xl font-medium shadow-sm transition-colors"
+                >
+                  确认删除
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* --- 模态框：删除标签确认 --- */}
+      {tagToDelete !== null && (
+        <div className="fixed inset-0 bg-gray-800/60 z-[70] flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm overflow-hidden animate-in fade-in zoom-in duration-200">
+            <div className="p-6 text-center">
+              <div className="flex items-center justify-center w-12 h-12 mx-auto mb-4 bg-red-100 text-red-500 rounded-full">
+                <IconWarning />
+              </div>
+              <h3 className="text-lg font-bold text-gray-800 mb-2">确认删除标签？</h3>
+              <p className="text-sm text-gray-500 mb-6">
+                您确定要移除标签 <span className="font-semibold text-gray-700">"{tagToDelete.tag}"</span> 吗？
+              </p>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setTagToDelete(null)}
+                  className="flex-1 px-4 py-2.5 text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl font-medium transition-colors"
+                >
+                  取消
+                </button>
+                <button
+                  onClick={confirmDeleteTag}
                   className="flex-1 px-4 py-2.5 text-white bg-red-600 hover:bg-red-700 rounded-xl font-medium shadow-sm transition-colors"
                 >
                   确认删除
