@@ -47,6 +47,7 @@ const DEFAULT_BOOKMARKS = [
   { id: 3, title: 'Dribbble', url: 'https://dribbble.com', description: '全球顶尖设计师的作品交流与灵感获取平台。', categoryId: 'design', tags: ['设计', '灵感'] },
   { id: 4, title: 'V2EX', url: 'https://v2ex.com', description: '一个关于分享和探索的地方，创意工作者们的社区。', categoryId: 'read', tags: ['社区', '讨论'] },
   { id: 5, title: 'React', url: 'https://react.dev', description: '用于构建 Web 和原生交互界面的库。', categoryId: 'dev', tags: ['前端', 'JavaScript'] },
+  { id: 6, title: 'UI Design Dictionary', url: 'https://ui-design-dictionary.pages.dev/', description: 'UI 设计词典，提供 UI 设计相关的术语解释与参考。', categoryId: 'design', tags: ['设计', '术语', '词典'] },
 ];
 
 export default function App() {
@@ -587,7 +588,7 @@ export default function App() {
                           className="text-indigo-300 hover:text-red-500 focus:outline-none ml-0.5 transition-colors"
                           title="删除标签"
                         >
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="18" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                         </button>
                       </span>
                     ))}
