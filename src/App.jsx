@@ -338,6 +338,17 @@ export default function App() {
     return <span className="text-lg w-[18px] h-[18px] flex items-center justify-center leading-none">{iconKey}</span>;
   };
 
+  // 国内网络友好的 Favicon 获取函数 (使用 Iowen API)
+  const getFaviconUrl = (urlString) => {
+    try {
+      const url = new URL(urlString);
+      // 使用国内访问稳定的 iowen 图标服务
+      return `https://api.iowen.cn/favicon/${url.hostname}.png`;
+    } catch (e) {
+      return '';
+    }
+  };
+
   return (
     <div className="flex h-screen w-full bg-gray-50 text-gray-800 font-sans overflow-hidden">
       
@@ -523,8 +534,8 @@ export default function App() {
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3 overflow-hidden">
                       <img 
-                        src={`https://www.google.com/s2/favicons?domain=${bookmark.url}&sz=64`} 
-                        alt="favicon" 
+                        src={getFaviconUrl(bookmark.url)} 
+                        alt="" 
                         className="w-8 h-8 rounded-md bg-gray-50 p-1 flex-shrink-0"
                         onError={(e) => { e.target.style.display = 'none'; }}
                       />
