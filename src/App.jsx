@@ -10,8 +10,6 @@ const IconTag = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height=
 const IconTrash = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>;
 const IconExternalLink = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>;
 const IconLayout = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>;
-
-// 新增分类图标
 const IconEdit = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>;
 const IconBook = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>;
 const IconMonitor = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>;
@@ -22,6 +20,7 @@ const IconBriefcase = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" h
 const IconWarning = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>;
 const IconDownload = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>;
 const IconSmile = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>;
+const IconGrip = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="5" r="1"></circle><circle cx="9" cy="12" r="1"></circle><circle cx="9" cy="19" r="1"></circle><circle cx="15" cy="5" r="1"></circle><circle cx="15" cy="12" r="1"></circle><circle cx="15" cy="19" r="1"></circle></svg>;
 
 const CATEGORY_ICONS = {
   folder: IconFolder,
@@ -52,7 +51,6 @@ const DEFAULT_BOOKMARKS = [
 
 export default function App() {
   // --- 状态管理 ---
-  // 使用惰性初始化 (Lazy Initial State) 从 LocalStorage 同步加载数据
   const [categories, setCategories] = useState(() => {
     try {
       const savedData = localStorage.getItem('bookmark_manager_data');
@@ -86,6 +84,7 @@ export default function App() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [sidebarWidth, setSidebarWidth] = useState(220); 
   const [isDragging, setIsDragging] = useState(false);
+  const [draggedItemId, setDraggedItemId] = useState(null); // 拖拽中的卡片 ID
 
   // 计算实际展示宽度
   const actualWidth = sidebarWidth < 140 ? 80 : sidebarWidth;
@@ -231,8 +230,6 @@ export default function App() {
   const handleSaveCategory = (e) => {
     e.preventDefault();
     if (!categoryForm.name.trim()) return;
-    
-    // 如果选择了自定义 Emoji，则存储 Emoji 字符串，否则存储图标 Key
     const finalIcon = categoryForm.icon === 'custom' ? (categoryForm.customEmoji || '📁') : categoryForm.icon;
 
     if (categoryForm.id) {
@@ -247,7 +244,6 @@ export default function App() {
       };
       setCategories([...categories, newCategory]);
     }
-    
     setIsCategoryModalOpen(false);
   };
 
@@ -317,33 +313,55 @@ export default function App() {
     const jsonString = JSON.stringify(exportStructure, null, 2);
     const blob = new Blob([jsonString], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
-    
     const a = document.createElement('a');
     a.href = url;
-    
     const date = new Date();
     const timestamp = `${date.getFullYear()}${(date.getMonth()+1).toString().padStart(2,'0')}${date.getDate().toString().padStart(2,'0')}_${date.getHours().toString().padStart(2,'0')}${date.getMinutes().toString().padStart(2,'0')}`;
     a.download = `bookmarks_grouped_${timestamp}.json`;
-    
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
 
+  // --- 卡片拖拽处理逻辑 ---
+  const handleCardDragStart = (id) => {
+    setDraggedItemId(id);
+  };
+
+  const handleCardDragOver = (e) => {
+    e.preventDefault(); // 允许放置
+  };
+
+  const handleCardDragEnter = (targetId) => {
+    if (draggedItemId === null || draggedItemId === targetId) return;
+
+    // 获取原始数组中两个项目的索引
+    const fromIndex = bookmarks.findIndex(b => b.id === draggedItemId);
+    const toIndex = bookmarks.findIndex(b => b.id === targetId);
+
+    if (fromIndex !== -1 && toIndex !== -1) {
+      const newBookmarks = [...bookmarks];
+      const itemToMove = newBookmarks.splice(fromIndex, 1)[0];
+      newBookmarks.splice(toIndex, 0, itemToMove);
+      setBookmarks(newBookmarks);
+    }
+  };
+
+  const handleCardDragEnd = () => {
+    setDraggedItemId(null);
+  };
+
   // --- 组件渲染助手 ---
   const renderCategoryIcon = (iconKey) => {
     const IconComponent = CATEGORY_ICONS[iconKey];
     if (IconComponent) return <IconComponent />;
-    // 如果不在预设库里，视为 Emoji 文本
     return <span className="text-lg w-[18px] h-[18px] flex items-center justify-center leading-none">{iconKey}</span>;
   };
 
-  // 国内网络友好的 Favicon 获取函数 (使用 Iowen API)
   const getFaviconUrl = (urlString) => {
     try {
       const url = new URL(urlString);
-      // 使用国内访问稳定的 iowen 图标服务
       return `https://api.iowen.cn/favicon/${url.hostname}.png`;
     } catch (e) {
       return '';
@@ -530,7 +548,14 @@ export default function App() {
               {filteredBookmarks.map((bookmark) => (
                 <div 
                   key={bookmark.id} 
-                  className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex flex-col h-full hover:shadow-md transition-shadow group relative"
+                  onDragOver={handleCardDragOver}
+                  onDragEnter={() => handleCardDragEnter(bookmark.id)}
+                  onDragEnd={handleCardDragEnd}
+                  className={`
+                    bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex flex-col h-full 
+                    transition-all group relative
+                    ${draggedItemId === bookmark.id ? 'opacity-40 scale-95 border-indigo-300 ring-2 ring-indigo-200' : 'hover:shadow-md'}
+                  `}
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3 overflow-hidden">
@@ -551,7 +576,19 @@ export default function App() {
                       </a>
                     </div>
                     
+                    {/* 操作按钮组 & 拖拽手柄 */}
                     <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      {/* 拖拽手柄图标 - 仅限非移动端且按住此图标触发拖拽 */}
+                      {!isMobile && (
+                        <div 
+                          draggable 
+                          onDragStart={() => handleCardDragStart(bookmark.id)}
+                          className="p-1.5 text-gray-400 hover:text-indigo-600 rounded bg-gray-50 hover:bg-indigo-50 cursor-grab active:cursor-grabbing"
+                          title="拖动排序"
+                        >
+                          <IconGrip />
+                        </div>
+                      )}
                       <a 
                         href={bookmark.url} 
                         target="_blank" 
@@ -588,7 +625,7 @@ export default function App() {
                           className="text-indigo-300 hover:text-red-500 focus:outline-none ml-0.5 transition-colors"
                           title="删除标签"
                         >
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="18" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                         </button>
                       </span>
                     ))}
@@ -667,7 +704,7 @@ export default function App() {
         </div>
       )}
 
-      {/* --- 模态框：分类编辑（包含 Emoji 自定义） --- */}
+      {/* --- 模态框：分类编辑 --- */}
       {isCategoryModalOpen && (
         <div className="fixed inset-0 bg-gray-800/60 z-[60] flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm overflow-hidden animate-in fade-in zoom-in duration-200">
@@ -696,7 +733,6 @@ export default function App() {
                       <IconComponent />
                     </button>
                   ))}
-                  {/* 自定义 Emoji 选项 */}
                   <button
                     type="button"
                     onClick={() => setCategoryForm({...categoryForm, icon: 'custom'})}
@@ -733,7 +769,7 @@ export default function App() {
         </div>
       )}
 
-      {/* --- 模态框：删除确认（通用逻辑） --- */}
+      {/* --- 模态框：删除确认 --- */}
       {deleteBookmarkId !== null && (
         <div className="fixed inset-0 bg-gray-800/60 z-[70] flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm overflow-hidden animate-in fade-in zoom-in duration-200">
