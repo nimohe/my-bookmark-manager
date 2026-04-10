@@ -51,7 +51,7 @@ const DEFAULT_BOOKMARKS = [
 
 export default function App() {
   // --- 状态管理 ---
-  // 修复 ESLint 警告：使用惰性初始化 (Lazy Initial State) 从 LocalStorage 同步加载数据
+  // 使用惰性初始化 (Lazy Initial State) 从 LocalStorage 同步加载数据
   const [categories, setCategories] = useState(() => {
     try {
       const savedData = localStorage.getItem('bookmark_manager_data');
@@ -101,7 +101,7 @@ export default function App() {
   // 删除确认弹窗状态
   const [deleteBookmarkId, setDeleteBookmarkId] = useState(null);
   const [deleteCategoryId, setDeleteCategoryId] = useState(null);
-  const [tagToDelete, setTagToDelete] = useState(null); // 新增：保存待删除的标签信息 { bookmarkId, tag }
+  const [tagToDelete, setTagToDelete] = useState(null); 
 
   // --- 事件监听初始化 ---
   useEffect(() => {
@@ -332,8 +332,8 @@ export default function App() {
 
   // --- 组件渲染助手 ---
   const renderCategoryIcon = (iconKey) => {
-    const IconComp = CATEGORY_ICONS[iconKey];
-    if (IconComp) return <IconComp />;
+    const IconComponent = CATEGORY_ICONS[iconKey];
+    if (IconComponent) return <IconComponent />;
     // 如果不在预设库里，视为 Emoji 文本
     return <span className="text-lg w-[18px] h-[18px] flex items-center justify-center leading-none">{iconKey}</span>;
   };
@@ -674,14 +674,14 @@ export default function App() {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">选择图标</label>
                 <div className="flex flex-wrap gap-2">
-                  {Object.entries(CATEGORY_ICONS).map(([key, IconComp]) => (
+                  {Object.entries(CATEGORY_ICONS).map(([key, IconComponent]) => (
                     <button
                       key={key}
                       type="button"
                       onClick={() => setCategoryForm({...categoryForm, icon: key})}
                       className={`p-2 rounded-lg border flex items-center justify-center transition-all ${categoryForm.icon === key ? 'border-indigo-500 bg-indigo-50 text-indigo-600' : 'border-gray-100 text-gray-500 hover:bg-gray-50'}`}
                     >
-                      <IconComp />
+                      <IconComponent />
                     </button>
                   ))}
                   {/* 自定义 Emoji 选项 */}
@@ -721,7 +721,7 @@ export default function App() {
         </div>
       )}
 
-      {/* --- 模态框：删除书签确认 --- */}
+      {/* --- 模态框：删除确认（通用逻辑） --- */}
       {deleteBookmarkId !== null && (
         <div className="fixed inset-0 bg-gray-800/60 z-[70] flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm overflow-hidden animate-in fade-in zoom-in duration-200">
