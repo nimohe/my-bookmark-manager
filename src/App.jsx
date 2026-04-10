@@ -477,19 +477,19 @@ export default function App() {
 
           <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
             <button 
+              onClick={() => setIsAddModalOpen(true)}
+              className="flex items-center gap-2 bg-indigo-600 text-white px-3 sm:px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 shadow-sm transition-colors"
+            >
+              <IconPlus />
+              <span className="hidden sm:inline">添加书签</span>
+            </button>
+            <button 
               onClick={handleExportData}
               title="导出所有书签和分类"
               className="flex items-center gap-2 bg-white border border-gray-300 text-gray-700 px-3 sm:px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 shadow-sm transition-colors"
             >
               <IconDownload />
               <span className="hidden md:inline">导出数据</span>
-            </button>
-            <button 
-              onClick={() => setIsAddModalOpen(true)}
-              className="flex items-center gap-2 bg-indigo-600 text-white px-3 sm:px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 shadow-sm transition-colors"
-            >
-              <IconPlus />
-              <span className="hidden sm:inline">添加书签</span>
             </button>
           </div>
         </header>
