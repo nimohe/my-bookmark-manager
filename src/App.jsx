@@ -51,8 +51,27 @@ const DEFAULT_BOOKMARKS = [
 
 export default function App() {
   // --- 状态管理 ---
-  const [categories, setCategories] = useState([]);
-  const [bookmarks, setBookmarks] = useState([]);
+  // 修复 ESLint 警告：使用惰性初始化 (Lazy Initial State) 从 LocalStorage 同步加载数据
+  const [categories, setCategories] = useState(() => {
+    try {
+      const savedData = localStorage.getItem('bookmark_manager_data');
+      if (savedData) return JSON.parse(savedData).categories || DEFAULT_CATEGORIES;
+    } catch (e) {
+      console.error('Failed to parse categories data', e);
+    }
+    return DEFAULT_CATEGORIES;
+  });
+
+  const [bookmarks, setBookmarks] = useState(() => {
+    try {
+      const savedData = localStorage.getItem('bookmark_manager_data');
+      if (savedData) return JSON.parse(savedData).bookmarks || DEFAULT_BOOKMARKS;
+    } catch (e) {
+      console.error('Failed to parse bookmarks data', e);
+    }
+    return DEFAULT_BOOKMARKS;
+  });
+
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   
@@ -84,26 +103,11 @@ export default function App() {
   const [deleteCategoryId, setDeleteCategoryId] = useState(null);
   const [tagToDelete, setTagToDelete] = useState(null); // 新增：保存待删除的标签信息 { bookmarkId, tag }
 
-  // --- 初始化数据加载 ---
+  // --- 事件监听初始化 ---
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener('resize', handleResize);
     
-    const savedData = localStorage.getItem('bookmark_manager_data');
-    if (savedData) {
-      try {
-        const parsedData = JSON.parse(savedData);
-        setCategories(parsedData.categories || DEFAULT_CATEGORIES);
-        setBookmarks(parsedData.bookmarks || DEFAULT_BOOKMARKS);
-      } catch (e) {
-        console.error('Failed to parse local storage data');
-        setCategories(DEFAULT_CATEGORIES);
-        setBookmarks(DEFAULT_BOOKMARKS);
-      }
-    } else {
-      setCategories(DEFAULT_CATEGORIES);
-      setBookmarks(DEFAULT_BOOKMARKS);
-    }
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
